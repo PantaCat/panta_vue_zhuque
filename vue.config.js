@@ -3,7 +3,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     host: 'localhost',  // 此前端项目的IP地址
-    port: 8081,  // 此前端项目的端口号
+    port: 9002,  // 此前端项目的端口号
     open: true,  //表示在启动开发服务器时，会自动打开浏览器并访问指定的地址
     proxy: {
       '/api': {
