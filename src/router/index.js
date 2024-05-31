@@ -1,10 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import ArrangeView from '../views/ArrangeView.vue'
+
 const routes = [
   {
     path: '/home',
     name: 'home',
     component: HomeView,
+    meta:{
+      shovalues:true
+    }
+  },
+  {
+    path: '/arrange',
+    name: 'arrange',
+    component: ArrangeView,
     meta:{
       shovalues:true
     }

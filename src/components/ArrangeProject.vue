@@ -1,66 +1,25 @@
 <template>
+  <el-avatar :size="60">
+    <img src="../assets/image3.png" @click="goBack"/>
+  </el-avatar>
   <div class="flat-background">
-    <el-container style="height: 97vh;background-color: #EBEDF0;">
-      <el-avatar :size="60">
-        <img src="../assets/image3.png" @click="goBack"/>
-      </el-avatar>
-      <el-main style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-        <el-row gutter="80">
-          <el-col span="6" v-for="lm in data">
-            <a :href="lm.linkAddress" target="_blank">
-              <img style="width: 300px;height: 200px;" :src="lm.imgAddress" />
-            </a>
-            <el-popconfirm title="确定删除?"
-                           confirm-button-text='是的'
-                           cancel-button-text='算了'
-                           icon=''
-                           @confirm='onDelete(lm.id)'
-                           >
-              <template #reference>
-                <el-icon><Delete /></el-icon>
-              </template>
-            </el-popconfirm>
-          </el-col>
-
-          <el-col span="6" style="display: flex; justify-content: center; align-items: center; height: 200px;">
-            <el-popover :visible="visible" placement="top" :width="500">
-              <el-form :model="form" label-width="auto">
-                <el-form-item label="序号">
-                  <el-input type="number" oninput="if(!/^[0-9]+$/.test(value)) value=value.replace(/\D/g,'');if(value>100)value=100;if(value<0)value=null" v-model="form.number"  />
-                </el-form-item>
-                <el-form-item label="名称">
-                  <el-input v-model="form.name" />
-                </el-form-item>
-                <el-form-item label="链接地址">
-                  <el-input v-model="form.linkAddress" />
-                </el-form-item>
-                <el-form-item label="图片封面">
-                  <input type="file" ref="fileInput" @change="handleFileChange">
-                </el-form-item>
-                <el-form-item>
-                  <div style="width: 100%;text-align: center; margin: 0">
-                    <el-button size="small" text @click="visible = false">
-                      <el-icon><CloseBold /></el-icon>
-                    </el-button>
-
-                    <el-button size="small" type="primary" @click="onSubmit">
-                      <el-icon><Select /></el-icon>
-                    </el-button>
-                  </div>
-                </el-form-item>
-              </el-form>
-
-              <template #reference>
-                <el-button @click="visible = true" type="primary"  size="large">
-                  新增<el-icon class="el-icon--right"><Promotion /></el-icon>
-                </el-button>
-              </template>
-            </el-popover>
-
-          </el-col>
-        </el-row>
-      </el-main>
-    </el-container>
+    <el-table
+        :data="user"
+        style="width: 100%"
+        :row-class-name="myclass"
+    >
+      <el-table-column type="index" label="Da2te" width="180" />
+      <el-table-column prop="name" label="Name" width="180" />
+      <el-table-column prop="address" label="Address" />
+      <el-table-column fixed="right" label="Operations" width="120">
+        <template #default>
+          <el-button link type="primary" size="small" @click="handleClick">
+            Detail
+          </el-button>
+          <el-button link type="primary" size="small">Edit</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -86,6 +45,31 @@ export default {
       number: '',
       linkAddress: ''
     })
+
+    const user = reactive(
+        [
+          {
+            date: '2016-05-03',
+            name: 'Tom',
+            address: 'No. 189, Grove St, Los Angeles',
+          },
+          {
+            date: '2016-05-02',
+            name: 'Tom',
+            address: 'No. 189, Grove St, Los Angeles',
+          },
+          {
+            date: '2016-05-04',
+            name: 'Tom',
+            address: 'No. 189, Grove St, Los Angeles',
+          },
+          {
+            date: '2016-05-01',
+            name: 'Tom',
+            address: 'No. 189, Grove St, Los Angeles',
+          },
+        ]
+    )
 
     const handleFileChange = (event) => {
       imgFile.value = event.target.files[0];
@@ -162,30 +146,51 @@ export default {
       }
     };
 
-    onMounted(fetchData);
 
+
+    onMounted(fetchData);
+    
     return {
       data,
       visible,
       form,
       onSubmit,
       handleFileChange,
-      onDelete
+      onDelete,
+      user
     };
   },
   methods: {
     goBack() {
       this.$router.go(-1);
+    },
+
+    // 修改单元格样式的方法
+    myclass({ row, column, rowIndex, columnIndex }) {
+     
+      // 还可以设置对应单元格颜色
+      // 表格的第二行-起始下标0
+      if (rowIndex === 1) {
+          return "warning-row";
+      }
     }
+    
   }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 .flat-background {
   background: #fff; /* 背景色 */
   border: 1px solid #ccc; /* 边框 */
   border-radius: 0; /* 无圆角 */
   box-shadow: none; /* 无阴影 */
+}
+
+.el-table .warning-row {
+  --el-table-tr-bg-color: #fde2e2;
+}
+.el-table .success-row {
+  --el-table-tr-bg-color: var(--el-color-success-light-9);
 }
 </style>

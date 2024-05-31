@@ -5,6 +5,11 @@
         <img src="./assets/image1.jpeg" />
       </el-avatar>
     </router-link>
+    <router-link to="/arrange">
+      <el-avatar :size="150">
+        <img src="./assets/image2.jpeg" />
+      </el-avatar>
+    </router-link>
   </dev>
   <router-view/>
 </template>
