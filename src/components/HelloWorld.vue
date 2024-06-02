@@ -1,9 +1,38 @@
 <template>
   <div class="flat-background">
-    <el-container style="height: 97vh;background-color: #EBEDF0;">
-      <el-avatar :size="60">
-        <img src="../assets/image3.png" @click="goBack"/>
-      </el-avatar>
+    <el-dialog
+        v-model="addVisible"
+        title="添加"
+        width="500"
+    >
+      <el-form :model="form" label-width="auto">
+        <el-form-item label="序号">
+          <el-input type="number" oninput="if(!/^[0-9]+$/.test(value)) value=value.replace(/\D/g,'');if(value>100)value=100;if(value<0)value=null" v-model="form.number"  />
+        </el-form-item>
+        <el-form-item label="名称">
+          <el-input v-model="form.name" />
+        </el-form-item>
+        <el-form-item label="链接地址">
+          <el-input v-model="form.linkAddress" />
+        </el-form-item>
+        <el-form-item label="图片封面">
+          <input type="file" ref="fileInput" @change="handleFileChange">
+        </el-form-item>
+        <el-form-item>
+          <div style="width: 100%;text-align: center; margin: 0">
+            <el-button size="small" text @click="addVisible = false">
+              <el-icon><CloseBold /></el-icon>
+            </el-button>
+
+            <el-button size="small" type="primary" @click="onSubmit">
+              <el-icon><Select /></el-icon>
+            </el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <el-container style="height: 97vh;background-color: #EBEDF0;" class="background-image">
+      <el-button type="primary" :icon="Back" size="large" @click="goBack">返回</el-button>
       <el-main style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
         <el-row gutter="80">
           <el-col span="6" v-for="lm in data">
@@ -23,40 +52,7 @@
           </el-col>
 
           <el-col span="6" style="display: flex; justify-content: center; align-items: center; height: 200px;">
-            <el-popover :visible="visible" placement="top" :width="500">
-              <el-form :model="form" label-width="auto">
-                <el-form-item label="序号">
-                  <el-input type="number" oninput="if(!/^[0-9]+$/.test(value)) value=value.replace(/\D/g,'');if(value>100)value=100;if(value<0)value=null" v-model="form.number"  />
-                </el-form-item>
-                <el-form-item label="名称">
-                  <el-input v-model="form.name" />
-                </el-form-item>
-                <el-form-item label="链接地址">
-                  <el-input v-model="form.linkAddress" />
-                </el-form-item>
-                <el-form-item label="图片封面">
-                  <input type="file" ref="fileInput" @change="handleFileChange">
-                </el-form-item>
-                <el-form-item>
-                  <div style="width: 100%;text-align: center; margin: 0">
-                    <el-button size="small" text @click="visible = false">
-                      <el-icon><CloseBold /></el-icon>
-                    </el-button>
-
-                    <el-button size="small" type="primary" @click="onSubmit">
-                      <el-icon><Select /></el-icon>
-                    </el-button>
-                  </div>
-                </el-form-item>
-              </el-form>
-
-              <template #reference>
-                <el-button @click="visible = true" type="primary"  size="large">
-                  新增<el-icon class="el-icon--right"><Promotion /></el-icon>
-                </el-button>
-              </template>
-            </el-popover>
-
+            <el-button type="primary" size="large" :icon="Plus" circle @click="addVisible = true" />
           </el-col>
         </el-row>
       </el-main>
@@ -68,19 +64,25 @@
 import { ref,onMounted,reactive } from 'vue';
 import { ElMessage } from 'element-plus';
 import axios from 'axios';
+import {Back, Plus, Promotion} from "@element-plus/icons-vue";
 
 export default {
   name: 'HelloWorld',
-  data() {
-    return {
-      file: null,
-      abc:''
-    };
+  computed: {
+    Plus() {
+      return Plus
+    },
+    Promotion() {
+      return Promotion
+    },
+    Back() {
+      return Back
+    }
   },
   setup() {
     const data = ref(null);
     const imgFile = ref(null);
-    const visible = ref(false)
+    const addVisible = ref(false)
     const form = reactive({
       name: '',
       number: '',
@@ -124,12 +126,13 @@ export default {
           })
           .then(response => {
             // 处理响应数据
-            visible.value = false;
             ElMessage({
               message: response.data,
               type: 'success',
             });
-            window.location.reload();
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
           })
           .catch(error => {
             // 处理错误情况
@@ -145,7 +148,9 @@ export default {
               message: response.data,
               type: 'success',
             });
-            window.location.reload();
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
           })
           .catch(error => {
             // 处理错误情况
@@ -166,7 +171,7 @@ export default {
 
     return {
       data,
-      visible,
+      addVisible,
       form,
       onSubmit,
       handleFileChange,
@@ -187,5 +192,12 @@ export default {
   border: 1px solid #ccc; /* 边框 */
   border-radius: 0; /* 无圆角 */
   box-shadow: none; /* 无阴影 */
+}
+.background-image {
+  width: 100%; /* 设置宽度 */
+  height: 100%; /* 设置高度 */
+  background-image: url('~@/assets/image4.jpg');
+  background-size: cover; /* 背景图片覆盖整个元素区域 */
+  background-position: center; /* 背景图片居中 */
 }
 </style>
