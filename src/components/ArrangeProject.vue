@@ -15,7 +15,7 @@
           <el-input v-model="form.linuxAddress" />
         </el-form-item>
         <el-form-item label="执行命令">
-          <el-input v-model="form.executeCommand" />
+          <textarea style="width: 100%;height: 50px;" v-model="form.executeCommand"></textarea>
         </el-form-item>
         <el-form-item>
           <div style="width: 100%;text-align: center; margin: 0">
@@ -45,7 +45,7 @@
           <el-input v-model="formUpdate.linuxAddress" />
         </el-form-item>
         <el-form-item label="执行命令">
-          <el-input v-model="formUpdate.executeCommand" />
+          <textarea style="width: 100%;height: 50px;" v-model="formUpdate.executeCommand"></textarea>
         </el-form-item>
         <el-form-item>
           <div style="width: 100%;text-align: center; margin: 0">
@@ -93,8 +93,12 @@
       >
         <el-table-column type="index" label="序号" width="180" />
         <el-table-column prop="name" label="项目名称" width="180" />
-        <el-table-column prop="executeCommand" label="本地路径" />
         <el-table-column prop="linuxAddress" label="服务器路径" />
+        <el-table-column label="执行命令">
+          <template #default="scope">
+            <div v-html="wrapText(scope.row.executeCommand)"></div>
+          </template>
+        </el-table-column>
 
         <el-table-column fixed="right" label="操作" width="180">
           <template #default="scope">
@@ -265,30 +269,26 @@ export default {
         alert('请上传部署包!');
         return;
       }
-    form.pkgFile = pkgFile; 
-    axios.post('/api/arrange/uploadFile', form,{
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-        .then(response => {
-          // 处理响应数据
-          return axios.post('/api/link/saveD3232ata', form);
-        })
-        .then(response => {
-          // 处理响应数据
-          ElMessage({
-            message: response.data,
-            type: 'success',
-          });
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-        })
-        .catch(error => {
-          // 处理错误情况
-          console.error(error);
+      form.pkgFile = pkgFile;
+      axios.post('/api/arrange/arrangeData', form,{
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then(response => {
+        // 处理响应数据
+        ElMessage({
+          message: response.data,
+          type: 'success',
         });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      })
+      .catch(error => {
+        // 处理错误情况
+        console.error(error);
+      });
     }
 
     const updateVisibleParam = (row) => {
@@ -348,6 +348,9 @@ export default {
       }else{
           return "color2";
       }
+    },
+    wrapText(text) {
+      return text.replace(/\n/g, '<br>');
     }
   }
 }
@@ -390,5 +393,10 @@ export default {
 
 .no-wrap {
   display: inline-block;
+}
+
+/* 控制单元格内文本的换行 */
+.el-table .cell {
+  white-space: pre-wrap; /* 保留空白符，自动换行 */
 }
 </style>
