@@ -1,7 +1,7 @@
 <template>
   <div class="background-image">
     <el-button type="primary" :icon="Back" size="large" @click="goBack">返回</el-button>
-    <el-button type="success" color="#F08080" :icon="Pointer" size="large" @click="addVisible = true">新增</el-button>
+    <el-button type="success" color="#F08080" :icon="Pointer" size="large" @click="addVisible = true;form.linuxAddress = '';form.executeCommand = '';">新增</el-button>
     <el-dialog
         v-model="addVisible"
         title="新增部署内容"
@@ -11,11 +11,11 @@
         <el-form-item label="项目名称">
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="本地路径">
-          <el-input v-model="form.localhostAddress" />
-        </el-form-item>
         <el-form-item label="服务器路径">
           <el-input v-model="form.linuxAddress" />
+        </el-form-item>
+        <el-form-item label="执行命令">
+          <el-input v-model="form.executeCommand" />
         </el-form-item>
         <el-form-item>
           <div style="width: 100%;text-align: center; margin: 0">
@@ -41,11 +41,11 @@
           <el-input v-show="false" v-model="formUpdate.id" />
           <el-input v-model="formUpdate.name" />
         </el-form-item>
-        <el-form-item label="本地路径">
-          <el-input v-model="formUpdate.localhostAddress" />
-        </el-form-item>
         <el-form-item label="服务器路径">
           <el-input v-model="formUpdate.linuxAddress" />
+        </el-form-item>
+        <el-form-item label="执行命令">
+          <el-input v-model="formUpdate.executeCommand" />
         </el-form-item>
         <el-form-item>
           <div style="width: 100%;text-align: center; margin: 0">
@@ -60,6 +60,31 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <el-dialog
+        v-model="arrangeVisible"
+        title="部署"
+        width="500"
+    >
+      <el-form label-width="auto">
+        <el-form-item label="部署包">
+          <el-input v-show="false" v-model="form.linuxAddress" />
+          <el-input v-show="false" v-model="form.executeCommand" />
+          <input id="fileArrange" type="file" ref="fileInput" @change="handleFileChange">
+        </el-form-item>
+        <el-form-item>
+          <div style="width: 100%;text-align: center; margin: 0">
+            <el-button size="small" text @click="arrangeVisible = false">
+              <el-icon><CloseBold /></el-icon>
+            </el-button>
+
+            <el-button size="small" type="primary" @click="onArrange">
+              <el-icon><Select /></el-icon>
+            </el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
     <div class="flat-background">
       <el-table
           :data="data"
@@ -68,15 +93,15 @@
       >
         <el-table-column type="index" label="序号" width="180" />
         <el-table-column prop="name" label="项目名称" width="180" />
-        <el-table-column prop="localhostAddress" label="本地路径" />
+        <el-table-column prop="executeCommand" label="本地路径" />
         <el-table-column prop="linuxAddress" label="服务器路径" />
 
         <el-table-column fixed="right" label="操作" width="180">
           <template #default="scope">
             <el-tooltip content="部署" effect="customized" placement="top">
-              <el-button type="success" :icon="Promotion" circle />
+              <el-button type="success" :icon="Promotion" circle @click="arrangeVisibleParam(scope.row)"/>
             </el-tooltip>
-
+            &nbsp;
             <el-tooltip content="修改" effect="customized" placement="top">
               <el-button color="#626aef" :icon="EditPen" circle @click="updateVisibleParam(scope.row)"/>
             </el-tooltip>
@@ -85,6 +110,7 @@
                            confirm-button-text='是的'
                            cancel-button-text='算了'
                            icon='Delete'
+                           placement="top"
                            @confirm='onDelete(scope.row)'
             >
               <template #reference>
@@ -132,33 +158,39 @@ export default {
   },
   setup() {
     const data = ref(null);
-    const updateVisible = ref(false);
+    const pkgFile = ref(null);
     const addVisible = ref(false);
+    const updateVisible = ref(false);
+    const arrangeVisible = ref(false);
 
     const form = reactive({
       name: '',
-      localhostAddress: '',
-      linuxAddress: ''
+      linuxAddress: '',
+      executeCommand: ''
     });
 
     const formUpdate = reactive({
       id:null,
       name: '',
-      localhostAddress: '',
-      linuxAddress: ''
+      linuxAddress: '',
+      executeCommand: ''
     });
+
+    const handleFileChange = (event) => {
+      pkgFile.value = event.target.files[0];
+    }
 
     const onAddSubmit = () => {
           if (form.name.trim() === '') {
             alert('项目名称不能为空!');
             return;
           }
-          if (form.localhostAddress.trim() === '') {
-            alert('本地地址不能为空!');
-            return;
-          }
           if (form.linuxAddress.trim() === '') {
             alert('服务器地址不能为空!');
+            return;
+          }
+          if (form.executeCommand.trim() === '') {
+            alert('执行命令不能为空!');
             return;
           }
 
@@ -184,12 +216,12 @@ export default {
         alert('项目名称不能为空!');
         return;
       }
-      if (formUpdate.localhostAddress.trim() === '') {
-        alert('本地地址不能为空!');
-        return;
-      }
       if (formUpdate.linuxAddress.trim() === '') {
         alert('服务器地址不能为空!');
+        return;
+      }
+      if (formUpdate.executeCommand.trim() === '') {
+        alert('执行命令不能为空!');
         return;
       }
 
@@ -211,7 +243,7 @@ export default {
     }
 
     const onDelete = (row) => {
-      axios.post('/api/arrange/deleteData', {"id":row.id})
+      axios.post('/api/arrange/deleteData',  {"id":row.id})
           .then(response => {
             // 处理响应数据
             ElMessage({
@@ -228,12 +260,52 @@ export default {
           });
     }
 
+    const onArrange = (row) => {
+      if (pkgFile.value === null) {
+        alert('请上传部署包!');
+        return;
+      }
+    form.pkgFile = pkgFile; 
+    axios.post('/api/arrange/uploadFile', form,{
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+        .then(response => {
+          // 处理响应数据
+          return axios.post('/api/link/saveD3232ata', form);
+        })
+        .then(response => {
+          // 处理响应数据
+          ElMessage({
+            message: response.data,
+            type: 'success',
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        })
+        .catch(error => {
+          // 处理错误情况
+          console.error(error);
+        });
+    }
+
     const updateVisibleParam = (row) => {
       updateVisible.value = true;
       formUpdate.id = row.id;
       formUpdate.name = row.name;
-      formUpdate.localhostAddress = row.localhostAddress;
       formUpdate.linuxAddress = row.linuxAddress;
+      formUpdate.executeCommand = row.executeCommand;
+    }
+
+    const arrangeVisibleParam = (row) => {
+      arrangeVisible.value = true;
+      if(document.getElementById('fileArrange') != null){
+        document.getElementById('fileArrange').value = null;
+      }
+      form.linuxAddress = row.linuxAddress;
+      form.executeCommand = row.executeCommand;
     }
 
     const fetchData = async () => {
@@ -253,10 +325,14 @@ export default {
       onAddSubmit,
       onUpdateSubmit,
       onDelete,
-      updateVisible,
       addVisible,
+      updateVisible,
+      arrangeVisible,
+      onArrange,
       updateVisibleParam,
-      formUpdate
+      arrangeVisibleParam,
+      formUpdate,
+      handleFileChange
     };
   },
   methods: {
