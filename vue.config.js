@@ -7,7 +7,7 @@ module.exports = defineConfig({
     open: true,  //表示在启动开发服务器时，会自动打开浏览器并访问指定的地址
     proxy: {
       '/api': {
-        target: 'http://localhost:9001', //接口域名
+        target: 'http://175.178.1.5:9001', //接口域名
         changeOrigin: true,       //是否跨域
         pathRewrite: {
           '^/api': ''  //假如我们的地址是 /api/member/getToken 会转化为 /member/getToken

@@ -105,7 +105,7 @@
             <el-tooltip content="部署" effect="customized" placement="top">
               <el-button type="success" :icon="Promotion" circle @click="arrangeVisibleParam(scope.row)"/>
             </el-tooltip>
-            &nbsp;
+            
             <el-tooltip content="修改" effect="customized" placement="top">
               <el-button color="#626aef" :icon="EditPen" circle @click="updateVisibleParam(scope.row)"/>
             </el-tooltip>
