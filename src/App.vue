@@ -1,16 +1,33 @@
 <template>
   <dev class="background" v-if="!$route.meta.shovalues">
-    <router-link to="/home">
-      <el-avatar :size="150">
-        <img :src="localImage1" />
-      </el-avatar>
-    </router-link>
-    <router-link to="/arrange">
-      <el-avatar :size="150">
-        <img :src="localImage2" />
-      </el-avatar>
-    </router-link>
+    <table style="text-align: center;">
+      <tr>
+        <td>
+          <router-link to="/home">
+            <el-avatar :size="150">
+              <img :src="localImage1" />
+            </el-avatar>
+          </router-link>
+          <router-link to="/arrange">
+            <el-avatar :size="150">
+              <img :src="localImage2" />
+            </el-avatar>
+          </router-link>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <router-link to="/fileUpload">
+            <el-avatar :size="150">
+              <img :src="localImage3" />
+            </el-avatar>
+          </router-link>
+        </td>
+      </tr>
+    </table>
   </dev>
+
   <router-view/>
 </template>
 
@@ -20,7 +37,8 @@ export default {
     return {
       // 使用require来导入本地图片
       localImage1: require('@/assets/image1.jpeg'),
-      localImage2: require('@/assets/image2.jpeg')
+      localImage2: require('@/assets/image2.jpeg'),
+      localImage3: require('@/assets/image6.png')
     };
   }
 };

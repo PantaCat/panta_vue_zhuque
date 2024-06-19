@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ArrangeView from '../views/ArrangeView.vue'
+import HomeView from '@/views/HomeView.vue'
+import ArrangeView from '@/views/ArrangeView.vue'
+import FileUploadView from '@/views/FileUploadView.vue'
+
 
 const routes = [
   {
@@ -15,6 +17,14 @@ const routes = [
     path: '/arrange',
     name: 'arrange',
     component: ArrangeView,
+    meta:{
+      shovalues:true
+    }
+  },
+  {
+    path: '/fileUpload',
+    name: 'fileUpload',
+    component: FileUploadView,
     meta:{
       shovalues:true
     }
