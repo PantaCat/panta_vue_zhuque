@@ -249,20 +249,20 @@ export default {
 
     const onDelete = (id) => {
       axios.post('/api/link/deleteData', {"id":id})
-          .then(response => {
-            // 处理响应数据
-            ElMessage({
-              message: response.data,
-              type: 'success',
-            });
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000);
-          })
-          .catch(error => {
-            // 处理错误情况
-            console.error(error);
-          });
+      .then(response => {
+        // 处理响应数据
+        ElMessage({
+          message: response.data,
+          type: 'success',
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      })
+      .catch(error => {
+        // 处理错误情况
+        console.error(error);
+      });
     };
 
     const fetchData = async () => {
