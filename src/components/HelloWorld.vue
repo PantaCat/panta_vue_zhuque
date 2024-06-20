@@ -202,21 +202,21 @@ export default {
 
       if (imgFile.value === null) {
         axios.post('/api/link/updateData', formUpdate)
-            .then(response => {
-              // 处理响应数据
-              ElMessage({
-                message: response.data,
-                type: 'success',
-              });
-              setTimeout(() => {
-                window.location.reload();
-              }, 1000);
-            })
-            .catch(error => {
-              // 处理错误情况
-              console.error(error);
-              return;
-            });
+        .then(response => {
+          // 处理响应数据
+          ElMessage({
+            message: response.data,
+            type: 'success',
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        })
+        .catch(error => {
+          // 处理错误情况
+          console.error(error);
+          return;
+        });
       }
 
       formUpdate.imgFile= imgFile;
