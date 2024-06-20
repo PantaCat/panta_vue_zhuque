@@ -3,8 +3,8 @@
     <div class="login-wrapper">
       <div class="header">Login</div>
       <div class="form-wrapper">
-        <input type="text" v-model="data.username" placeholder="username" class="input-item">
-        <input type="password" v-model="data.password" placeholder="password" class="input-item">
+        <input type="text" v-model="data.userName" placeholder="username" class="input-item">
+        <input type="password" v-model="data.passWord" placeholder="password" class="input-item">
         <div class="btn" :onclick="commitLogin">Go</div>
       </div>
     </div>
@@ -12,19 +12,36 @@
 </template>
 
 <script>
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import { useRouter } from 'vue-router';
+import axios from "axios";
+import {ElMessage} from "element-plus";
 
 export default {
   name:"Login",
   setup(){
     const router = useRouter();
-    const data = ref({
-      username:'',
-      password:''
+    const data = reactive({
+      userName:'',
+      passWord:''
     });
     const commitLogin = () => {
-      router.push('/home');
+      axios.post('/api/main/login', data)
+      .then(response => {
+        if(response.data.code != "200"){
+          ElMessage({
+            message: response.data.msg,
+            type: 'error',
+          });
+        }else{
+          // 处理响应数据
+          router.push('/home');
+        }
+      })
+      .catch(error => {
+        // 处理错误情况
+        console.error(error);
+      });
     }
     
     return {
@@ -37,15 +54,10 @@ export default {
 
 <style scoped>
 
-html {
-  height: 100%;
-}
-body {
-  height: 100%;
-}
+
 .container {
   /* margin-top: 5%; */
-  height: 100%;
+  height: 100vh;
   width: 100%;
   background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
 }

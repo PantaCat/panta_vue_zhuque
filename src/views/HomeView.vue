@@ -40,6 +40,8 @@
 <script>
 
 import {Back} from "@element-plus/icons-vue";
+import { useRouter } from 'vue-router';
+
 
 export default {
   name:"home",
@@ -57,9 +59,9 @@ export default {
     };
   },
   setup(){
+    const router = useRouter();
     const outLogin = () => {
-      alert(1);
-      //this.$router.go(-1);
+      router.push('/login');
     }
         
     return {
@@ -85,9 +87,9 @@ export default {
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 0;
+  top: 50px;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 50vh;
 }
 </style>
