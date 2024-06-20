@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
+import HelloView from '@/views/HelloWordView.vue'
 import ArrangeView from '@/views/ArrangeView.vue'
 import FileUploadView from '@/views/FileUploadView.vue'
 
@@ -9,6 +10,14 @@ const routes = [
     path: '/home',
     name: 'home',
     component: HomeView,
+    meta:{
+      shovalues:true
+    }
+  },
+  {
+    path: '/hello',
+    name: 'hello',
+    component: HelloView,
     meta:{
       shovalues:true
     }
@@ -25,17 +34,6 @@ const routes = [
     path: '/fileUpload',
     name: 'fileUpload',
     component: FileUploadView,
-    meta:{
-      shovalues:true
-    }
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
     meta:{
       shovalues:true
     }
