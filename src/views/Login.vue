@@ -18,7 +18,7 @@ import axios from "axios";
 import {ElMessage} from "element-plus";
 
 export default {
-  name:"Login",
+  name:"login",
   setup(){
     const router = useRouter();
     const data = reactive({

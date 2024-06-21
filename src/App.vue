@@ -1,5 +1,5 @@
 <template>
-  <dev class="background" v-if="!$route.meta.shovalues">
+  <dev  v-if="!$route.meta.shovalues">
     <Login></Login>
   </dev>
 
@@ -10,14 +10,6 @@
 import Login from '@/views/Login.vue'
 
 export default {
-  data() {
-    return {
-      // 使用require来导入本地图片
-      localImage1: require('@/assets/image1.jpeg'),
-      localImage2: require('@/assets/image2.jpeg'),
-      localImage3: require('@/assets/image6.png')
-    };
-  }, 
   components: {
     Login
   }

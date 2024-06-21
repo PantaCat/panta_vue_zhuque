@@ -1,11 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
+import LoginView from '@/views/Login.vue'
 import HelloView from '@/views/HelloWordView.vue'
 import ArrangeView from '@/views/ArrangeView.vue'
 import FileUploadView from '@/views/FileUploadView.vue'
 
 
 const routes = [
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView,
+    meta:{
+      shovalues:true
+    }
+  },
   {
     path: '/home',
     name: 'home',

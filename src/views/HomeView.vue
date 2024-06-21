@@ -1,7 +1,7 @@
 <template>
   <dev class="background1">
     <dev style="float: right;">
-      <el-button type="primary" :icon="Back" size="large" @click="outLogin">登出</el-button>
+      <el-button type="primary" :icon="Back" size="large" @click="logout">登出</el-button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </dev>
     <dev class="background2">
@@ -41,6 +41,8 @@
 
 import {Back} from "@element-plus/icons-vue";
 import { useRouter } from 'vue-router';
+import axios from "axios";
+import {ElMessage} from "element-plus";
 
 
 export default {
@@ -60,12 +62,19 @@ export default {
   },
   setup(){
     const router = useRouter();
-    const outLogin = () => {
-      router.push('/login');
+    const logout = () => {
+      axios.post('/api/main/logout')
+      .then(response => {
+        router.push('/login');
+      })
+      .catch(error => {
+        // 处理错误情况
+        console.error(error);
+      });
     }
         
     return {
-      outLogin
+      logout
     }
   }
 };
