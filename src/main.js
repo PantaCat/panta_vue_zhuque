@@ -34,4 +34,10 @@ app.use(router)
 Object.keys(ElIconModules).forEach(function (key) {
     app.component(ElIconModules[key].name, ElIconModules[key])
 })
+setInterval(() => {
+    const cookieuser = cookies.isKey("zhuqueloginuser");
+    if(!cookieuser){
+        router.push('/login');// 未登录，跳转到登录页面
+    }
+}, 1000)
 app.mount('#app')
