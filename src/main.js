@@ -1,7 +1,7 @@
 import {createApp, reactive} from 'vue'
 import App from './App.vue'
 import router from './router'
-import ElementPlus, {ElMessage} from 'element-plus'
+import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import * as ElIconModules from '@element-plus/icons-vue'
@@ -9,10 +9,6 @@ import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
 
 const app = createApp(App)
-const data = reactive({
-    userName:'',
-    passWord:''
-});
 router.beforeEach((to, from, next) => {
     if(to.fullPath === "/" || to.fullPath === "/login"){
         next(true);
